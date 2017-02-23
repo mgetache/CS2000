@@ -207,7 +207,7 @@ void Program::RunSimulation()
 	// Create a while loop. This will continue looping while
 	// the day is less than the mission length (GetMissionLength()),
 	// and while missionSuccess is true.
-	while (missionSuccess = true && day < GetMissionLength())
+	while (missionSuccess == true && day < GetMissionLength())
 	{
 		// Adjust current supplies via the AdjustFood(), AdjustWaste(), and AdjustOxygen() functions.
 		AdjustFood();
