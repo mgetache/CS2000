@@ -1,191 +1,90 @@
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <iomanip>
-
 using namespace std;
 
-struct Student
-{
-    string surname;
-    string givenName;
-    string degree;
-    float gpa;
-	string classes[4];
+// UNCOMMENT THESE OUT AS YOU ADD THE FILES
+#include "DynamicArray.hpp"
+#include "kitten.hpp"
+#include "Button.hpp"
+#include "Fraction.hpp"
 
-    void Display()
-    {
-        cout << endl;
-        cout << surname << ", " << givenName;
-        cout << "\t" << degree << " (" << gpa << " gpa)" << endl;
-		cout << "CLASSES: " << endl;
-		cout << "\t" << classes[0] << endl;
-		cout << "\t" << classes[1] << endl;
-		cout << "\t" << classes[2] << endl;
-		cout << "\t" << classes[3] << endl;
-		
-		 cout << endl;
-    }
+const string TEST_DATA[] = {
+	"Aardvark", "Albatross", "Alligator",
+	"Bandicoot", "Bird", "Bison",
+	"Cheetah", "Chipmunk", "Cow",
+	"Elephant", "Emu", "Echidna",
+	"Falcon", "Fox", "Fish",
+	"Gecko", "Goat", "Goose",
+	"Heron", "Horse", "Hyena",
+	"Iguana", "Insect", "Impala",
+	"Jackal", "Jellyfish", "Jaguar"
 };
 
-Student* ReadStudentList( string filename, int& studentCount )
+// UNCOMMENT THSE OUT AS YOU IMPLEMENT THE CLASSES!
+
+void DynamicArrayProgram()
 {
-    Student* studentList = nullptr;
 
-    ifstream input( filename );
+	DynamicArray arr( 5 );
 
-    // First line of text file is the amount of students
-    input >> studentCount;
+	for ( int i = 0; i < arr.GetSize(); i++ )
+	{
+	arr.Set( i, TEST_DATA[i] );
+	}
 
-    studentList = new Student[ studentCount ];
-
-    for ( int i = 0; i < studentCount; i++ )
-    {
-        input >> studentList[i].surname;
-        input >> studentList[i].givenName;
-        input >> studentList[i].degree;
-        input >> studentList[i].gpa;
-		for (int k = 0; k < 4; k ++)
-		{
-			input >> studentList[i].classes[k];
-		}
-
-    }
-
-    input.close();
-
-    cout << studentCount << " students loaded" << endl;
-
-    return studentList;
+	arr.Display();
+	
 }
 
-void SaveStudentList( string filename, const Student* studentList, int studentCount )
+void KittenProgram()
 {
-    ofstream output( filename );
+	
+	kitten happyCat( TEST_DATA[2] );
+	happyCat.Display();
 
-    output << studentCount << endl;
-    for ( int i = 0; i < studentCount; i++ )
-    {
-		output << setw(20)
-			<< studentList[i].surname << setw(15)
-			<< studentList[i].givenName << setw(10)
-			<< studentList[i].degree << setw(10)
-			<< studentList[i].gpa << endl;
-			
-		for (int k = 0; k < 4; k++)
-			{
-				output << " " << studentList[i].classes[k] << endl;
-			}
-		
-    }
+	kitten angryCat( TEST_DATA[4] );
+	angryCat.Display();
 
-    output.close();
+	kitten sadCat( TEST_DATA[6] );
+	sadCat.Display();
 
-    cout << "File saved" << endl;
+	kitten curiousCat( TEST_DATA[8] );
+	curiousCat.Display();
+	
 }
 
-void DisplayStudents( const Student* studentList, int studentCount )
+void ButtonProgram()
 {
-    for ( int i = 0; i < studentCount; i++ )
-    {
-        string name = studentList[i].surname + ", " + studentList[i].givenName;
-		cout << i << ". \t " << setw(20)
-			<< name << setw(15)
-			<< "DEGREE: " << studentList[i].degree << setw(15)
-			<< "GPA: " << studentList[i].gpa << endl;
-		
-    }
+	
+	Button btn;
+	btn.SetText( "Button!" );
+	btn.Draw();
+
+	btn.SetText( "Another Button!" );
+	btn.Draw();
+	
 }
 
-void MakeANote()
+void FractionProgram()
 {
-    ofstream output( "USE_THIS_DIRECTORY.TXT" );
-    output << "PUT YOUR INPUT FILE IN THIS DIRECTORY!" << endl;
-    output.close();
+	
+	Fraction f1, f2, f3;
+
+	f1.Setup( 1, 3 );
+	f2.Setup( 2, 5 );
+
+	f3 = f1 * f2;
+
+	cout << f1 << " * " << f2 << " = " << f3 << endl;
+	
 }
 
 int main()
 {
-    MakeANote();
+	DynamicArrayProgram();
+	KittenProgram();
+	ButtonProgram();
+	FractionProgram();
 
-    int studentCount;
-    Student* students = ReadStudentList( "studentList_classes.txt", studentCount );
-
-    bool done = false;
-    while ( !done )
-    {
-        cout << endl << endl;
-
-        DisplayStudents( students, studentCount );
-
-        cout << endl << "Enter a student ID, between 0 and " << studentCount - 1 << ", " << endl;
-        cout << "OR enter -1 to save quit." << endl;
-        cout << " >> ";
-        int modifyIndex;
-        cin >> modifyIndex;
-
-        if ( modifyIndex < -1 || modifyIndex >= studentCount )
-        {
-            // Invalid!
-            continue;
-        }
-
-        if ( modifyIndex == -1 )
-        {
-            break;
-        }
-
-        students[ modifyIndex ].Display();
-
-        cout << "Modify which field?" << endl;
-        cout << " 1. Surname \n 2. Given name \n 3. Degree \n 4. GPA \n 5. Class " << endl;
-        cout << "\n >> ";
-        int choice;
-        cin >> choice;
-
-        while ( choice < 1 || choice > 5 )
-        {
-            cout << "Invalid choice, try again: ";
-            cin >> choice;
-        }
-
-        if ( choice == 1 )
-        {
-            cout << "Enter new surname: ";
-            cin >> students[ modifyIndex ].surname;
-        }
-        else if ( choice == 2 )
-        {
-            cout << "Enter new given name: ";
-            cin >> students[ modifyIndex ].givenName;
-        }
-        else if ( choice == 3 )
-        {
-            cout << "Enter new degree: ";
-            cin >> students[ modifyIndex ].degree;
-        }
-        else if ( choice == 4 )
-        {
-            cout << "Enter new gpa: ";
-            cin >> students[ modifyIndex ].gpa;
-        }
-        else if ( choice == 5 )
-        {
-			int k;
-			cout << "what index";
-			cin >> k;
-			cout << "Enter new class: ";
-			
-			cin >> students[modifyIndex].classes[k];
-            
-        }
-    }
-
-    SaveStudentList( "studentList_classes.txt", students, studentCount );
-
-    if ( students != nullptr )
-    {
-        delete [] students; // free student array
-    }
-    return 0;
+	while (true) {}
+	return 0;
 }
